@@ -1,0 +1,994 @@
+:root {
+    --main: #1d4ed8;     /* biru utama */
+    --bg-soft: #dbeafe;  /* biru lembut */
+    --bg: #ffffff;
+    --text: #111827;
+    --panel-border: #1e40af;
+    --surface: #ffffff;
+    --muted: #475569;
+}
+
+body {
+    font-family: 'Fira Code', monospace;
+    color: var(--text);
+    background: var(--bg);
+    font-weight: 700 !important;
+}
+
+body * {
+    font-weight: 700 !important;
+}
+
+/* Sidebar sembunyikan / tampilkan */
+.app-sidebar {
+    transition:
+        width 0.28s ease,
+        padding 0.28s ease,
+        opacity 0.22s ease,
+        border-color 0.28s ease;
+}
+
+.sidebar-top {
+    position: relative;
+}
+
+.sidebar-toggle-btn,
+.sidebar-reopen-btn {
+    border: 1px solid var(--main);
+    color: var(--main);
+    background: var(--surface);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    line-height: 1;
+    font-family: inherit;
+}
+
+.sidebar-toggle-btn {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.125rem;
+    border-radius: 4px;
+}
+
+.sidebar-toggle-btn:hover,
+.sidebar-reopen-btn:hover {
+    background: var(--main);
+    color: #fff;
+}
+
+.sidebar-reopen-btn {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    z-index: 40;
+    transform: translateY(-50%);
+    width: 1.75rem;
+    padding: 0.65rem 0.2rem;
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    font-size: 1.25rem;
+    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.12);
+}
+
+@media (min-width: 768px) {
+    body.sidebar-collapsed .app-sidebar {
+        width: 0;
+        min-width: 0;
+        padding-left: 0;
+        padding-right: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        border-right-color: transparent;
+    }
+}
+
+@media (max-width: 767px) {
+    body.sidebar-collapsed .app-sidebar {
+        display: none;
+    }
+}
+
+/* Popup notifikasi (menggantikan riwayat) */
+.system-notify {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.system-notify.hidden {
+    display: none;
+}
+
+.system-notify-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+}
+
+.system-notify-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 28rem;
+    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.25);
+    animation: notify-in 0.22s ease-out;
+}
+
+@keyframes notify-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#system-notify-message {
+    font-size: 12px;
+}
+
+#system-notify-message .notify-hl-prefix {
+    color: var(--muted);
+}
+
+#system-notify-message .notify-hl-amount {
+    color: #047857;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+#system-notify-message .notify-hl-saldo {
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+#system-notify-message .notify-hl-fail {
+    color: #dc2626;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#system-notify-message .notify-hl-success {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+#system-notify-message .notify-hl-activation {
+    color: #c2410c;
+    font-weight: 700;
+}
+
+#system-notify-message .notify-hl-total {
+    color: #7c3aed;
+    font-weight: 700;
+}
+
+#system-notify-message .notify-hl-tracking,
+#system-notify-message .notify-hl-action {
+    color: var(--main);
+    font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+    #system-notify-message .notify-hl-amount {
+        color: #34d399;
+    }
+
+    #system-notify-message .notify-hl-saldo {
+        color: #93c5fd;
+    }
+
+    #system-notify-message .notify-hl-fail {
+        color: #f87171;
+    }
+
+    #system-notify-message .notify-hl-success {
+        color: #4ade80;
+    }
+
+    #system-notify-message .notify-hl-activation {
+        color: #fb923c;
+    }
+
+    #system-notify-message .notify-hl-total {
+        color: #c4b5fd;
+    }
+}
+
+.panel {
+    border: 1px solid var(--panel-border);
+    background: var(--surface);
+}
+
+/* BOX */
+.box {
+    border: 1px solid var(--main);
+    padding: 10px;
+    font-size: 12px;
+    background: var(--surface);
+}
+
+.box h2 {
+    margin-bottom: 6px;
+    color: var(--main);
+}
+
+.box h3 {
+    color: var(--main);
+}
+
+/* BUTTON */
+.btn {
+    border: 1px solid var(--main);
+    padding: 7px 10px;
+    color: var(--main);
+    background: var(--surface);
+    transition: 0.2s ease;
+}
+
+.btn:hover {
+    background: #ff0000;
+    color: #ffffff;
+}
+
+.btn-red {
+    border: 1px solid red;
+    padding: 7px 10px;
+    color: #ef4444;
+    background: var(--surface);
+    transition: 0.2s ease;
+}
+
+.btn-red:hover {
+    background: red;
+    color: #0b1220;
+}
+
+.btn:disabled,
+.btn-red:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.status-pill {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    padding: 0 10px;
+    min-height: 36px;
+    background: var(--bg-soft);
+}
+
+.status-idle {
+    color: var(--muted);
+}
+
+.status-running {
+    color: #f59e0b;
+}
+
+.status-success {
+    color: #22c55e;
+}
+
+.status-error {
+    color: #ef4444;
+}
+
+/* TERMINAL */
+#terminal div {
+    margin-bottom: 4px;
+    animation: fade 0.2s ease-in;
+}
+
+@keyframes fade {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+/* PROGRESS */
+#progress {
+    background: var(--main);
+}
+
+/* Ikuti tema browser/OS (Chrome) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --main: #60a5fa;
+        --bg-soft: #1e293b;
+        --bg: #0b1220;
+        --text: #e2e8f0;
+        --panel-border: #334155;
+        --surface: #111827;
+        --muted: #94a3b8;
+    }
+}
+
+/* Proses tracking (di atas peta) */
+.tracking-process-panel h2.tracking-process-title {
+    margin-bottom: 8px;
+    color: var(--main);
+    font-size: 14px;
+}
+
+.tracking-log {
+    min-height: 5.5rem;
+    max-height: 5.5rem;
+    overflow: hidden;
+    padding: 8px 10px;
+    border: 1px solid var(--panel-border);
+    background: var(--bg-soft);
+    font-size: 11px;
+    line-height: 1.45;
+    position: relative;
+}
+
+.tracking-log::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.75rem;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--bg-soft));
+}
+
+.tracking-log-line {
+    margin: 0 0 4px;
+    opacity: 0;
+    animation: tracking-line-in 0.35s ease forwards;
+}
+
+.tracking-log-line.is-active {
+    color: var(--main);
+}
+
+@keyframes tracking-line-in {
+    from {
+        opacity: 0;
+        transform: translateX(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.tracking-progress-labels {
+    color: var(--muted);
+}
+
+.tracking-progress-track {
+    width: 100%;
+    height: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg-soft);
+    border: 1px solid var(--panel-border);
+}
+
+.tracking-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--main), #22c55e);
+    transition: width 0.35s ease;
+    border-radius: 3px;
+}
+
+/* MAP — live cyber tracking */
+.map-panel h2 {
+    margin: 0;
+    color: var(--main);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+}
+
+.map-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.map-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.08);
+}
+
+.map-live-badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+    animation: map-live-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes map-live-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+}
+
+#map,
+.map-stage {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+    width: 100%;
+    border-radius: 10px;
+    background:
+        linear-gradient(180deg, rgba(3, 18, 38, 0.28) 0%, rgba(2, 10, 24, 0.55) 100%),
+        url("petadunia.jpg") center/cover no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.18);
+}
+
+.map-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 42%, rgba(2, 8, 20, 0.72) 100%),
+        linear-gradient(90deg, rgba(2, 8, 20, 0.35), transparent 18%, transparent 82%, rgba(2, 8, 20, 0.35));
+    z-index: 2;
+}
+
+.map-grid-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.35) 1px, transparent 1px);
+    background-size: 42px 42px;
+    animation: map-grid-drift 18s linear infinite;
+    z-index: 2;
+}
+
+@keyframes map-grid-drift {
+    from { background-position: 0 0; }
+    to { background-position: 42px 42px; }
+}
+
+.map-scanline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 18%;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, rgba(56, 189, 248, 0.16), transparent);
+    animation: map-scan 4.8s linear infinite;
+    z-index: 3;
+}
+
+@keyframes map-scan {
+    0% { top: -18%; }
+    100% { top: 100%; }
+}
+
+.map-radar {
+    position: absolute;
+    width: 220%;
+    height: 220%;
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(56, 189, 248, 0.14) 28deg, transparent 46deg);
+    animation: map-radar-spin 7s linear infinite;
+    z-index: 2;
+    mix-blend-mode: screen;
+}
+
+@keyframes map-radar-spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.map-routes,
+.map-nodes,
+.map-packets {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.map-routes {
+    overflow: visible;
+}
+
+.map-arc {
+    fill: none;
+    stroke: rgba(56, 189, 248, 0.85);
+    stroke-width: 0.35;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 2px rgba(56, 189, 248, 0.9));
+    stroke-dasharray: 3 120;
+    animation: map-arc-flow 2.4s linear infinite;
+}
+
+.map-arc.is-alert {
+    stroke: rgba(251, 146, 60, 0.95);
+    filter: drop-shadow(0 0 2px rgba(251, 146, 60, 0.95));
+}
+
+@keyframes map-arc-flow {
+    to { stroke-dashoffset: -123; }
+}
+
+.map-node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: #7dd3fc;
+    box-shadow: 0 0 10px #38bdf8, 0 0 18px rgba(56, 189, 248, 0.7);
+    z-index: 5;
+}
+
+.map-node.is-hub {
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    background: #67e8f9;
+}
+
+.map-node.is-target {
+    background: #fb923c;
+    box-shadow: 0 0 12px #fb923c, 0 0 22px rgba(251, 146, 60, 0.8);
+}
+
+.map-node::after {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 1px solid rgba(125, 211, 252, 0.7);
+    animation: map-ping 2.2s ease-out infinite;
+}
+
+.map-node.is-target::after {
+    border-color: rgba(251, 146, 60, 0.8);
+}
+
+@keyframes map-ping {
+    0% { transform: scale(0.6); opacity: 0.9; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+
+.map-packet {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    margin: -3.5px 0 0 -3.5px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    box-shadow: 0 0 10px #38bdf8, 0 0 18px #22d3ee;
+    z-index: 6;
+}
+
+.map-packet.is-alert {
+    background: #ffedd5;
+    box-shadow: 0 0 10px #fb923c, 0 0 16px #f97316;
+}
+
+.map-hud {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 7;
+    font-size: 10px;
+    line-height: 1.55;
+    color: #7dd3fc;
+    text-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+    background: rgba(2, 12, 28, 0.45);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 6px 8px;
+    backdrop-filter: blur(4px);
+}
+
+.map-hud p {
+    margin: 0;
+}
+
+.map-hud span {
+    color: #e0f2fe;
+    margin-left: 6px;
+}
+
+.map-lock-label {
+    position: absolute;
+    z-index: 7;
+    font-size: 10px;
+    color: #fb923c;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 8px rgba(251, 146, 60, 0.8);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -140%);
+    transition: opacity 0.25s ease;
+    white-space: nowrap;
+}
+
+.map-lock-label.is-on {
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    #map,
+    .map-stage {
+        height: 240px;
+    }
+
+    .map-hud {
+        font-size: 9px;
+        padding: 4px 6px;
+    }
+}
+
+/* —— DETECTION BANKING: backdrop + kartu seperti app trading —— */
+
+.panel.banking-panel-shell {
+    border: none;
+}
+
+.banking-panel-shell {
+    box-shadow:
+        0 8px 32px rgba(15, 23, 42, 0.12),
+        0 0 0 1px rgba(37, 99, 235, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface);
+}
+
+.banking-panel-title {
+    font-family: "DM Sans", system-ui, sans-serif;
+    margin: 0;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 45%, #1e40af 100%);
+}
+
+.bank-card {
+    font-family: "DM Sans", system-ui, sans-serif;
+}
+
+.banking-hero-bg {
+    position: relative;
+    isolation: isolate;
+    min-height: 12rem;
+    background-color: #64748b;
+    background-image:
+        linear-gradient(145deg, rgba(37, 99, 235, 0.82) 0%, rgba(15, 23, 42, 0.75) 55%, rgba(15, 23, 42, 0.88) 100%),
+        url("assets/bank-panel-bg.png");
+    background-size: auto, cover;
+    background-position: center, center top;
+    background-repeat: no-repeat, no-repeat;
+}
+
+/* Jika tidak ada file gambar, lapisan gradient tetup menyerupai app */
+.banking-hero-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background: radial-gradient(ellipse 120% 80% at 20% -10%, rgba(255, 255, 255, 0.45), transparent 50%),
+                radial-gradient(ellipse 90% 60% at 100% 80%, rgba(59, 130, 246, 0.35), transparent 55%);
+}
+
+.banking-cards {
+    position: relative;
+    z-index: 1;
+}
+
+.bank-card {
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+}
+
+.bank-card-muted {
+    background: rgba(255, 255, 255, 0.88);
+    color: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.bank-card-primary {
+    background: linear-gradient(160deg, #3b82f6 0%, #2563eb 42%, #1d4ed8 100%);
+    color: #f8fafc;
+    border: 1px solid rgba(147, 197, 253, 0.45);
+}
+
+.bank-card-primary .bank-dl dt {
+    color: rgba(241, 245, 249, 0.75);
+}
+
+.bank-card-muted .bank-dl dt {
+    color: var(--muted);
+}
+
+.bank-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+    opacity: 0.95;
+}
+
+.bank-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    vertical-align: middle;
+    background: rgba(239, 68, 68, 0.95);
+    color: #fff;
+}
+
+.bank-card-primary .bank-badge {
+    background: rgba(251, 191, 36, 0.95);
+    color: #451a03;
+}
+
+.bank-dl {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.bank-dl > div {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 8px;
+    align-items: baseline;
+    min-width: 0;
+}
+
+.bank-dl dt {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.bank-dl dd {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.bank-balance-row dd {
+    font-size: 1.125rem;
+    letter-spacing: 0.02em;
+}
+
+.bank-card-primary .bank-balance-highlight dd {
+    color: #bbf7d0;
+}
+
+.bank-card-muted .bank-balance-row dd {
+    color: #059669;
+}
+
+.banking-panel-actions {
+    border-top: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+/* REKENING PENERIMA: gaya clone sederhana seperti tes.html */
+.receiver-clone-card {
+    background: #1c6db2;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.receiver-clone-label {
+    font-size: 12px;
+    opacity: 0.85;
+    margin: 0 0 8px;
+}
+
+.receiver-clone-balance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.receiver-clone-balance h2 {
+    margin: 5px 0;
+    font-size: 24px;
+}
+
+.receiver-clone-meta {
+    margin-top: 8px;
+    font-size: 12px;
+    display: grid;
+    gap: 4px;
+    line-height: 1.35;
+}
+
+.receiver-clone-meta p {
+    margin: 0;
+    opacity: 0.95;
+}
+
+.receiver-clone-menu {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    padding-top: 12px;
+}
+
+.virtual-clone-card {
+    background: rgba(255, 255, 255, 0.9);
+    color: #0f172a;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.16);
+    font-family: Arial, sans-serif;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.virtual-clone-label {
+    font-size: 12px;
+    opacity: 0.85;
+    margin: 0 0 8px;
+}
+
+.virtual-clone-balance h2 {
+    margin: 5px 0;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.virtual-clone-meta {
+    margin-top: 8px;
+    font-size: 12px;
+    display: grid;
+    gap: 4px;
+    line-height: 1.35;
+}
+
+.virtual-clone-meta p {
+    margin: 0;
+}
+
+.virtual-clone-menu {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    border-top: 1px solid rgba(15, 23, 42, 0.15);
+    padding-top: 12px;
+}
+
+.clone-detail-eye-btn {
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 4px;
+    transition: opacity 0.2s ease;
+}
+
+.clone-detail-eye-btn:hover {
+    opacity: 0.8;
+}
+
+.clone-meta-collapsed {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .virtual-clone-card,
+    .receiver-clone-card {
+        padding: 10px;
+        min-width: 0;
+    }
+
+    .virtual-clone-label,
+    .receiver-clone-label {
+        font-size: 10px;
+        margin-bottom: 4px;
+        line-height: 1.25;
+    }
+
+    .virtual-clone-balance h2,
+    .receiver-clone-balance h2 {
+        font-size: 14px;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .virtual-clone-meta,
+    .receiver-clone-meta {
+        font-size: 10px;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    .virtual-clone-meta p,
+    .receiver-clone-meta p {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .virtual-clone-menu,
+    .receiver-clone-menu {
+        font-size: 10px;
+        padding-top: 8px;
+        gap: 4px;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .bank-dl > div {
+        grid-template-columns: 5.25rem 1fr;
+        gap: 6px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .banking-panel-title {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1e3a8a 100%);
+    }
+
+    .bank-card-muted {
+        background: rgba(15, 23, 42, 0.82);
+        color: var(--text);
+        border-color: rgba(148, 163, 184, 0.25);
+    }
+
+    .bank-card-muted .bank-balance-row dd {
+        color: #34d399;
+    }
+
+    .banking-panel-actions {
+        border-top-color: rgba(51, 65, 85, 0.8);
+    }
+}
